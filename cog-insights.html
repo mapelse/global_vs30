@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="title" content="Turkiye Vs30 Zemin Haritası" />
+    <meta
+      name="description"
+      content="Interaktif karşılaştırmalı Vs30 zemin (jeoloji) haritası"
+    />
+    <meta
+      name="keywords"
+      content="Deprem, jeoloji, mapelse, vs30, istanbul, hatay, kahramanmaraş, zemin, zemin durumu, 6 şubat, büyük istanbul depremi, fay, fay hattı, sismik"
+    />
+    <meta name="author" content="San Ozmen" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-W02DH516ZY"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-W02DH516ZY");
+    </script>
+
+  </head>
+  <body>
+    <div id="map" style="height: 100vh"></div>
+    <div id="loader" class="loader"></div>
+    <div id="transparencyControl">
+      <label for="transparencySlider">Şeffaflık Ayarı:</label>
+      <br />
+      <input
+        type="range"
+        id="transparencySlider"
+        min="0"
+        max="1"
+        step="0.1"
+        value="0.5"
+      />
+    </div>
+
+    <div id="sidePane">
+      <div class="side-pane-title">
+        COG Insights ile oluşturulmuştur.
+        <a href="https://github.com/sanozmen/cog-insights" target="_blank"
+          >Github Repo</a
+        >
+       
+      </div>
+
+      <div id="instructions">
+
+        <a href="https://mapelse.github.io/">ANASAYFAYA GERI DON</a>
+
+        <p>Global Vs30 verisi, zeminin 30 metre derinliğe kadar olan ortalama makaslama dalga hızını 
+          temsil eder ve deprem sarsıntısı potansiyelini değerlendirmek için önemli bir gösterge olarak kabul edilir.
+           Bu ölçüm, zeminin sismik dalgaları nasıl yükselttiğini belirleyerek, deprem etkilerine karşı daha iyi hazırlık ve 
+           hafifletme stratejilerinin geliştirilmesine yardımcı olur. Düşük Vs30 değerleri, genellikle daha yumuşak zemin koşullarını 
+           ve sismik dalgaların daha fazla yükseltildiğini gösterir, bu da yüksek sismik risk anlamına gelebilir. Yüksek Vs30 değerleri
+            ise, daha sert zemin koşullarını ifade eder ve dalgaların daha az yükseltildiği anlamına gelir,
+             bu da daha düşük sismik riski işaret eder. Ancak, Vs30 verisi deprem kırılganlığı açısından mutlak veya nihai bir risk göstergesi değil,
+              sadece dikkate alınması gereken önemli faktörlerden biridir. Kaynak linki aşağıda mevcuttur.
+</p>
+
+<p>            Not:Bu bilgiler genel bilgilendirme amaçlıdır ve profesyonel tavsiye olarak kabul edilmemelidir. 
+  Mevcut verilerin kullanışlı bir şekilde sunumundan ibarettir.
+  Herhangi bir karar vermeden önce uygun uzmanlardan tavsiye almanız önerilir. </p>
+      </div>
+
+      <!-- COG URL Input -->
+     
+
+
+      <!-- Scale Domain Control Row -->
+
+
+
+      
+
+     
+
+      <div id="border1" class="border"></div>
+
+      <div id="chartContainer">
+        <canvas id="scatterChart"></canvas>
+      </div>
+      <div id="border2" class="border"></div>
+      <div id="instructions">
+        <h2>Nasıl Kullanılır</h2>
+<ul>
+  <li>
+    <strong>GeoTIFF Verilerini Görüntüleme:</strong> Farklı konumlardaki değerleri görmek için haritanın üzerinde gezinin. Sağ köşedeki kutucukta değerlere göz atabilirsiniz.
+  </li>
+  <li>
+    <strong>Nokta Ekleme:</strong> Nokta eklemek için haritaya tıklayın. Nokta, tıklanan konumdaki veri değerini gösterecektir. Nokta numaraları her bir noktanın yanında gösterilir.
+  </li>
+  <li>
+    <strong>Verileri Karşılaştırma:</strong> Bir nokta oluşturulduğunda gösterilen menüdeki "Karşılaştırmaya Ekle" butonuna tıklayarak, o boktanın verilerini karşılaştırma grafiğine ekleyin.
+  </li>
+  <li>
+    <strong>Konumunuzu Bulma:</strong> Haritayı konumunuza odaklamak ve konumunuzda bir nokta eklemek için sol üstteki "Beni Bul" butonuna tıklayın.
+  </li>
+  <li>
+    <strong>Konum Arama:</strong> Konum aramak için sol üstteki arama çubuğunu kullanın. Aranan konuma gidilecek ve bir nokta eklenecektir.
+  </li>
+  <li>
+    <strong>Tekil Nokta Kaldırma:</strong> Haritadan ve grafikten kaldırmak için nokta yakınlarında sağ tıklayın. Mobil cihazda ise, noktanın yakınlarında uzun basın.
+  </li>
+  <li>
+    <strong>Noktaları Temizleme:</strong> Haritadan tüm noktaları kaldırmak ve karşılaştırma grafiğini temizlemek için sol üstteki "Noktaları Temizle" butonuna tıklayın.
+  </li>
+  <li>
+    <strong>Şeffaflık Ayarlama:</strong> Gösterilen haritanın şeffaflığını ayarlamak için soldaki Şeffaflık Ayarı kaydıracını kullanın.
+  </li>
+
+  <li>
+    <strong>Noktaları Karşılaştırma:</strong> Karşılaştırmaya eklenen farklı noktalar arasındaki ilişkiyi görmek için bu paneldeki grafiğe bakabilirsiniz.
+  </li>
+  <li>
+    <strong>Yan Paneli Genişletmek ve Daraltmak:</strong> Harita ve grafiği daha iyi görebilmek için yan panelin kenarındaki ok düğmesini kullanarak paneli genişletin veya daraltın.
+  </li>
+</ul>
+
+      </div>
+      <div id="border" class="border"></div>
+
+      <div id="references">
+        
+         
+
+        <p>
+          Veri Kaynağı:
+          <a href="https://earthquake.usgs.gov/data/vs30/" target="_blank"
+            >Global Vs30 Mosaic</a
+          >
+        </p>
+      </div>
+    </div>
+
+    <div id="toggleButton" onclick="togglePane()"></div>
+
+    <div id="pixelValue"></div>
+    <div id="legend">
+      <!-- Legend items will be added dynamically -->
+    </div>
+
+    <script src="js/leaflet.js"></script>
+    <script src="js/georaster.js"></script>
+    <script src="js/chroma.js"></script>
+    <script src="js/georaster-layer-for-leaflet.js"></script>
+    <script src="js/geoblaze.js"></script>
+    <script src="js/chart.js"></script>
+    <link rel="stylesheet" href="css/ControlGeocoder.css" />
+    <script src="js/ControlGeocoder.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
