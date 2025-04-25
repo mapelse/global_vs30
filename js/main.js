@@ -9,13 +9,14 @@ const osm = L.tileLayer(
   "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
   {
     attribution:
-      "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
+      "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors",
+      zIndex:0
   }
 );
 
 // ESRI World Imagery with labels
-const esriImagery     = L.esri.basemapLayer("Imagery");       // satellite tiles
-const esriImageryLbls = L.esri.basemapLayer("ImageryLabels"); // transparent label overlay
+const esriImagery     = L.esri.basemapLayer("Imagery").setZIndex(0);       // satellite tiles
+const esriImageryLbls = L.esri.basemapLayer("ImageryLabels").setZIndex(0); // transparent label overlay
 const esriHybrid      = L.layerGroup([esriImagery, esriImageryLbls]);
 
 // Put the map on OSM at start
@@ -23,6 +24,7 @@ const map = L.map("map", {
   center:[39.057, 34.9116],
   zoom:7,
   minZoom:7,
+  maxZoom:10,
   maxBounds:[
     [35.808593,25.663883],
     [42.107613,44.822754]
@@ -109,6 +111,7 @@ function addOrUpdateRasterLayer(
         return "transparent";
       return getColorForValue(value, scaleMin, scaleMax, 'Spectral');
     },
+    zIndex:500
   });
   georasterLayer.addTo(map);
   updateLegend()
