@@ -2,21 +2,41 @@
 var georaster;
 
 // Initialize leaflet map
-var map = L.map("map", {
-  center: [39.057, 34.9116], // Approximate center of Turkey
-  zoom: 7,
+// ------------------ BASE LAYERS -----------------------------------
+
+// OpenStreetMap (already in your code but moved here for clarity)
+const osm = L.tileLayer(
+  "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+  {
+    attribution:
+      "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
+  }
+);
+
+// ESRI World Imagery with labels
+const esriImagery     = L.esri.basemapLayer("Imagery");       // satellite tiles
+const esriImageryLbls = L.esri.basemapLayer("ImageryLabels"); // transparent label overlay
+const esriHybrid      = L.layerGroup([esriImagery, esriImageryLbls]);
+
+// Put the map on OSM at start
+const map = L.map("map", {
+  center:[39.057, 34.9116],
+  zoom:7,
   minZoom:7,
-  maxBounds: [
-    [35.808593, 25.663883], // Southwest bounds of Turkey
-    [42.107613, 44.822754]  // Northeast bounds of Turkey
-  ] // Makes the bounds fully solid, not allowing the user to drag outside
+  maxBounds:[
+    [35.808593,25.663883],
+    [42.107613,44.822754]
+  ],
+  layers:[osm]                    // ⭐ start with OSM
 });
 
-// Add OpenStreetMap basemap
-L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  attribution:
-    "&copy; <a href='&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors",
-}).addTo(map);
+// ------------------ LAYER SWITCHER --------------------------------
+const baseLayers = {
+  "OpenStreetMap": osm,
+  "ESRI Uydu (Hybrid)": esriHybrid
+};
+
+L.control.layers(baseLayers, null, {position:"topleft"}).addTo(map);
 
 // Parse GeoRaster and add it to the map
 var url_to_geotiff_file =
@@ -280,7 +300,7 @@ function removeFromComparison(location, buttonId) {
   updateScatterPlot();
 
   // Revert button text and style
-  button.textContent = "Add to Comparison";
+  button.textContent = "Karşılaştırmaya Ekle";
   button.classList.remove("remove-from-graph");
 
   // Revert button functionality to add to graph
@@ -390,7 +410,7 @@ findMeButton.onAdd = function (map) {
   L.DomEvent.addListener(buttonDiv, "click", function () {
     map.locate({
       setView: true,
-      maxZoom: 12,
+      maxZoom: 10,
       watch: false, // Disable continuous location updates
     });
 
@@ -663,38 +683,61 @@ function updateRasterOpacity(opacity) {
 }
 
 function updateLegend() {
-  var selectedScale = 'Spectral';
-  const legend = document.getElementById("legend");
-  legend.innerHTML = "<h4>Gösterim (V<sub>S30</sub> Değerleri)</h4>";
 
-  // Get values from input fields and parse them to numbers
+  const legend = document.getElementById("legend");
   const scaleMinValue = 180;
   const scaleMaxValue = 900;
+  const steps         = 10;      // how many colour chips
 
-  // Check if the values are numbers
-  if (isNaN(scaleMinValue) || isNaN(scaleMaxValue)) {
-    legend.innerHTML += "<p>Invalid scale values</p>";
-    return;
+  // ---------- build HTML ----------
+  let html = `<h4>Gösterim (V<sub>S30</sub> Değerleri)</h4>
+              <div class="legend-items">`;
+
+  const interval = (scaleMaxValue - scaleMinValue)/steps;
+  for (let i=0;i<=steps;i++){
+     const value = scaleMinValue + i*interval;
+     const colour = getColorForValue(
+                      value, scaleMinValue, scaleMaxValue, "Spectral");
+
+     html += `<div class="legend-item">
+                <span class="legend-swatch" style="background:${colour}"></span>
+                ${value.toFixed(0)}
+              </div>`;
   }
+  html += "</div>";
 
-  // Generate legend items
-  const steps = 10;
-  const interval = (scaleMaxValue - scaleMinValue) / steps;
+  legend.innerHTML = html;
 
-  for (let i = 0; i <= steps; i++) {
-    const value = scaleMinValue + i * interval;
-    const color = getColorForValue(
-      value,
-      scaleMinValue,
-      scaleMaxValue,
-      selectedScale
-    );
-
-    legend.innerHTML += `<div>
-                <i style="background: ${color}; width: 18px; height: 18px; float: left; margin-right: 8px;"></i>
-                ${value.toFixed(2)}
-            </div>`;
-  }
+  /* realign the slider now that the legend’s height may have changed */
+  stackSliderAboveLegend();
 }
 
-
+  /* ------------------------------------------------------------------ *
+ *  Stack the transparency slider directly ABOVE the legend, so the   *
+ *  two blocks never overlap – no matter how tall the legend becomes. *
+ * ------------------------------------------------------------------ */
+  function stackSliderAboveLegend(){
+    const lg = document.getElementById("legend");
+    const sl = document.getElementById("transparencyControl");
+    if(!lg || !sl) return;
+  
+    // keep the slider's left-edge aligned with legend
+    sl.style.left = lg.style.left || "10px";
+  
+    // place slider just above legend (10 px gap)
+    const gap = 10;
+    const legendBottom = parseInt(lg.style.bottom || 10, 10);
+    const legendHeight = lg.offsetHeight;
+    sl.style.bottom = (legendBottom + legendHeight + gap) + "px";
+  }
+  
+  /* run once on load & resize */
+  window.addEventListener("load",   stackSliderAboveLegend);
+  window.addEventListener("resize", stackSliderAboveLegend);
+  
+  /* run again whenever the legend is rebuilt */
+  const _updateLegend = updateLegend;          // keep your existing function
+  updateLegend = function(){
+    _updateLegend.apply(this, arguments);      // draw legend as usual
+    stackSliderAboveLegend();                  // then restack controls
+  };
