@@ -29,7 +29,7 @@ const map = L.map("map", {
     [35.808593,25.663883],
     [42.107613,44.822754]
   ],
-  layers:[osm]                    // ⭐ start with OSM
+  layers:[osm]                  
 });
 
 // ------------------ LAYER SWITCHER --------------------------------
