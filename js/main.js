@@ -42,8 +42,7 @@ L.control.layers(baseLayers, null, {position:"topleft"}).addTo(map);
 
 // Parse GeoRaster and add it to the map
 var url_to_geotiff_file =
-  "https://d1f1pd1jtui8d5.cloudfront.net/global_vs30_Cnv_Cnv.tif?Expires=1745965735&Signature=azAtcCHX3FqgsEqQK-EPo1iLLaU~Y6hyRNtBmYYDHOf5nZsqDSGHFjJ1SAf9Fl936kltflgwaD4MDHyQU7mwcHwWG7mQTD8roeLTuBi3AMIHw1wcY~t12eHqTzkV82twEW4eKPhtwz6BeKuP5ixwhf4dgFtqM9YNQNJ1kMAPuCRYfIDqSjnuKQeQ~m6QskPwD1eL3FN~Wo5eRxhPNRFcqpcAeGQMiE~C24Kof3jE5FHcBA4CkZVeK3wFV3NDKVAVb4n~ZLdowR8dJlk366g7fxy~v8Cz4cdZHnvJ0EoNjYOC2pSGrKZL3NF9uKHMwLf2hoXtalWokvog5Xwv2ds7Ag__&Key-Pair-Id=K3ABCDEFGHIJKL";
-
+"https://dxxxxxxxx.cloudfront.net/global_vs30_Cnv_Cnv.tif?Expires=1745965735&Signature=azAtcCHX3FqgsEqQK-EPo1iLLaU~Y6hyRNtBmYYDHOf5nZsqDSGHFjJ1SAf9Fl936kltflgwaD4MDHyQU7mwcHwWG7mQTD8roeLTuBi3AMIHw1wcY~t12eHqTzkV82twEW4eKPhtwz6BeKuP5ixwhf4dgFtqM9YNQNJ1kMAPuCRYfIDqSjnuKQeQ~m6QskPwD1eL3FN~Wo5eRxhPNRFcqpcAeGQMiE~C24Kof3jE5FHcBA4CkZVeK3wFV3NDKVAVb4n~ZLdowR8dJlk366g7fxy~v8Cz4cdZHnvJ0EoNjYOC2pSGrKZL3NF9uKHMwLf2hoXtalWokvog5Xwv2ds7Ag__&Key-Pair-Id=K3ABCDEFGHIJKL";
 var scaleMinInput = 200;
 var scaleMaxInput = 900;
 
