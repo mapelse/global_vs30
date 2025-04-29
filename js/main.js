@@ -24,7 +24,7 @@ const map = L.map("map", {
   center:[39.057, 34.9116],
   zoom:7,
   minZoom:7,
-  maxZoom:10,
+  maxZoom:12,
   maxBounds:[
     [35.808593,25.663883],
     [42.107613,44.822754]
@@ -412,7 +412,7 @@ findMeButton.onAdd = function (map) {
   L.DomEvent.addListener(buttonDiv, "click", function () {
     map.locate({
       setView: true,
-      maxZoom: 10,
+      maxZoom: 12,
       watch: false, // Disable continuous location updates
     });
 
