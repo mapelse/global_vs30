@@ -19,9 +19,16 @@ SIGNED=$(aws cloudfront sign \
    --output text)
 
 # 3) main.js içinde değiştir
+# scripts/sign_and_replace.sh  -- debug satırları ekle
+echo ">>> SED ÖNCESİ:"
+grep -n url_to_geotiff_file "${MAINJS}" | head -1
+
 sed -i.bak -E \
-  "s|(const[[:space:]]+url_to_geotiff_file[[:space:]]*=[[:space:]]*\").*(\";)|\1${SIGNED}\2|" \
+  "s|(url_to_geotiff_file[[:space:]]*=[[:space:]]*\").*(\";)|\1${SIGNED}\2|" \
   "${MAINJS}"
+
+echo ">>> SED SONRASI:"
+grep -n url_to_geotiff_file "${MAINJS}" | head -1
 
 echo "🔑  Signed URL injected into ${MAINJS}"
 #
