@@ -24,3 +24,4 @@ sed -i.bak -E \
   "${MAINJS}"
 
 echo "🔑  Signed URL injected into ${MAINJS}"
+#
