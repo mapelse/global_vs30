@@ -34,8 +34,17 @@ jobs:
 
       - name: Sign URL and patch main.js
         run: |
+          set -euo pipefail
+          set -x                         # <- kabuk komutlarını ekrana bas
+
           chmod +x scripts/sign_and_replace.sh
-          ./scripts/sign_and_replace.sh
+          scripts/sign_and_replace.sh
+
+          echo "🔍  Yeni imzalı URL:"
+          cat signed_url.txt || true     # (script bunu üretiyorsa)
+
+          echo "🔍  main.js içindeki satır:"
+          grep -n "url_to_geotiff_file" js/main.js | head -1
 
       - name: Show diff
         run: git --no-pager diff --stat
