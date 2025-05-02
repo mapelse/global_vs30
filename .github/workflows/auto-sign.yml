@@ -1,9 +1,12 @@
-name: Renew CloudFront signed URL
+name: Renew CloudFront signed URL          # <- TEK name
 
-on:
+on:                                        # <- TEK on
   schedule:
-    - cron: '0 3 */3 * *'   # Every 3 days at 03:00 UTC
-  workflow_dispatch:        # Allows manual runs
+    - cron: '0 3 */3 * *'                  # her 3 günde bir 03:00 UTC
+  workflow_dispatch:                       # manuel tetikleyebilme
+
+permissions:                               # GITHUB_TOKEN > push için write
+  contents: write
 
 jobs:
   renew:
@@ -14,37 +17,37 @@ jobs:
       KEY_PAIR_ID: ${{ secrets.CF_KEY_PAIR_ID }}
 
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        aws-access-key-id:     ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region:            ${{ secrets.AWS_REGION }}
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id:     ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region:            ${{ secrets.AWS_REGION }}
 
-    - name: Write private key
-      run: |
-        echo "${{ secrets.CF_PRIVATE_KEY_PEM }}" > vs30_private.pem
-        chmod 600 vs30_private.pem
+      - name: Write private key
+        run: |
+          echo "${{ secrets.CF_PRIVATE_KEY_PEM }}" > vs30_private.pem
+          chmod 600 vs30_private.pem
 
-    - name: Sign URL and patch main.js
-      run: |
-        chmod +x scripts/sign_and_replace.sh
-        scripts/sign_and_replace.sh
+      - name: Sign URL and patch main.js
+        run: |
+          chmod +x scripts/sign_and_replace.sh
+          ./scripts/sign_and_replace.sh
 
-    - name: Show diff
-      run: git --no-pager diff --stat
+      - name: Show diff
+        run: git --no-pager diff --stat
 
-    - name: Commit & push if changed
-      run: |
-        git config user.name  "github-actions"
-        git config user.email "actions@github.com"
-        git add -u
-        if ! git diff --cached --quiet; then
-          git commit -m "chore(ci): refresh signed URL"
-          git push
-        else
-          echo "No changes – skip commit."
-        fi
+      - name: Commit & push if changed
+        run: |
+          git config user.name  "github-actions"
+          git config user.email "actions@github.com"
+          git add -u
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(ci): refresh CloudFront signed URL"
+            git push
+          else
+            echo "No changes – skip commit."
+          fi
