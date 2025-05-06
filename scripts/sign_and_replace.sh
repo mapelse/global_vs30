@@ -23,9 +23,8 @@ echo ">>> SED ÖNCESİ:"
 grep -n 'url_to_geotiff_file' "${MAINJS}" | head -1
 
 sed -i.bak -E \
-  's|var url_to_geotiff_file *= *".*"|var url_to_geotiff_file = "'"${SIGNED}"'";|g' \
+  '/var url_to_geotiff_file *=/c\var url_to_geotiff_file = "'"${SIGNED}"'";' \
   "${MAINJS}"
-
 
 echo ">>> SED SONRASI:"
 grep -n 'url_to_geotiff_file' "${MAINJS}" | head -1
