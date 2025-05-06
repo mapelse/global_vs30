@@ -40,6 +40,8 @@ const baseLayers = {
 
 L.control.layers(baseLayers, null, {position:"topleft"}).addTo(map);
 
+//s
+
 // Parse GeoRaster and add it to the map
 var url_to_geotiff_file ="https://d1f1pd1jtui8d5.cloudfront.net/global_vs30_Cnv_Cnv.tif?Expires=1746435375&Signature=fCNGjDFBlXsawHlLzOZ2sG4rYLurs~C-zlGF02ysOgg8Lv5V0kF86d44YJ0h2J~ZSYpmytQNU4ESh48IECKErYO0YPdj3Ke3TSIR8WvxaYVs5pmK5TyZywF9Ei-rl3XWljJvTW9MKFIPcXJE65Fpd4XlHQh~gtBgUQoV89uzbxjHnkojVJ4q6ftT0qQzjWgMuqzQr~GVPTaU577y4LdG-gdcOGk-oX1bWdhVrRfysFCZ62ccJgVe7PNztKRkDoWfXO-40ADrOn869M2hRF0NZ8VlHGlPdnO-3Qgx5vx4vAOtjqQnQy-wYCiQ1lC9YWHDTXj54khXZzNzKE~6uPuPSw__&Key-Pair-Id=K3BYPE7UJNJQVV"
 var scaleMinInput = 200;
