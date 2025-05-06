@@ -2,8 +2,7 @@ name: Renew CloudFront signed URL          # <- TEK name
 
 on:                                        # <- TEK on
   schedule:
-    - cron: '0 3 */2 * *'                  # her 3 günde bir 03:00 UTC
-  workflow_dispatch:                       # manuel tetikleyebilme
+    - cron: '0 3 */2 * *'                  # her 2 günde bir 03:00 UTC
 
 permissions:                               # GITHUB_TOKEN > push için write
   contents: write
