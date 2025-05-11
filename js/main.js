@@ -5,48 +5,45 @@ var georaster;
 // ------------------ BASE LAYERS -----------------------------------
 
 // OpenStreetMap (already in your code but moved here for clarity)
-const osm = L.tileLayer(
-  "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-  {
-    attribution:
-      "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors",
-      zIndex:0
-  }
-);
+const osm = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  attribution:
+    "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors",
+  zIndex: 0,
+});
 
 // ESRI World Imagery with labels
-const esriImagery     = L.esri.basemapLayer("Imagery").setZIndex(0);       // satellite tiles
+const esriImagery = L.esri.basemapLayer("Imagery").setZIndex(0); // satellite tiles
 const esriImageryLbls = L.esri.basemapLayer("ImageryLabels").setZIndex(0); // transparent label overlay
-const esriHybrid      = L.layerGroup([esriImagery, esriImageryLbls]);
+const esriHybrid = L.layerGroup([esriImagery, esriImageryLbls]);
 
 // Put the map on OSM at start
 const map = L.map("map", {
-  center:[39.057, 34.9116],
-  zoom:7,
-  minZoom:7,
-  maxZoom:12,
-  maxBounds:[
+  center: [39.057, 34.9116],
+  zoom: 7,
+  minZoom: 7,
+  maxZoom: 12,
+  /*maxBounds:[
     [35.808593,25.663883],
     [42.107613,44.822754]
-  ],
-  layers:[osm]                  
+  ],*/
+  layers: [osm],
 });
 
 // ------------------ LAYER SWITCHER --------------------------------
 const baseLayers = {
-  "OpenStreetMap": osm,
-  "ESRI Uydu (Hybrid)": esriHybrid
+  OpenStreetMap: osm,
+  "ESRI Uydu (Hybrid)": esriHybrid,
 };
 
-L.control.layers(baseLayers, null, {position:"topleft"}).addTo(map);
+L.control.layers(baseLayers, null, { position: "topleft" }).addTo(map);
 
 //s
 
 // Parse GeoRaster and add it to the map
-var url_to_geotiff_file = "https://d1f1pd1jtui8d5.cloudfront.net/global_vs30_Cnv_Cnv.tif?Expires=1747193920&Signature=jOqARst1P58QzSaD86yIPP6X-yHhkYVd8U6I37CwjEkN6WzUnzC7XSzicrutAdQmq74ltHMm~YOuRwJfi435ZlkP6Vprl4mRyekugRcr-e1Ipg-22JiCjP7JnRlbBoY2iDepAblqJCZ4AgUPq-a0Hj43T6Nj9HLfh2zuOOAoMY8QfK0dQBd5uG6wT99k-g1KghLOoLjIhb~~SdO4b8Jcq~gNBACx2G8CgVR1JAQwwZIXX5eml~p7Mh1FT~1rRLQwvwEhWhlIzDxDGGAzkSofHcDXYko-RwVnUoMRjDFP9kqksFcIDVOY-fGiwhJrgePrKk6vTLaV7EhGhA0sM~BYOw__&Key-Pair-Id=K3BYPE7UJNJQVV";
+var url_to_geotiff_file =
+  "https://d1f1pd1jtui8d5.cloudfront.net/global_vs30_Cnv_Cnv.tif?Expires=1747193920&Signature=jOqARst1P58QzSaD86yIPP6X-yHhkYVd8U6I37CwjEkN6WzUnzC7XSzicrutAdQmq74ltHMm~YOuRwJfi435ZlkP6Vprl4mRyekugRcr-e1Ipg-22JiCjP7JnRlbBoY2iDepAblqJCZ4AgUPq-a0Hj43T6Nj9HLfh2zuOOAoMY8QfK0dQBd5uG6wT99k-g1KghLOoLjIhb~~SdO4b8Jcq~gNBACx2G8CgVR1JAQwwZIXX5eml~p7Mh1FT~1rRLQwvwEhWhlIzDxDGGAzkSofHcDXYko-RwVnUoMRjDFP9kqksFcIDVOY-fGiwhJrgePrKk6vTLaV7EhGhA0sM~BYOw__&Key-Pair-Id=K3BYPE7UJNJQVV";
 var scaleMinInput = 200;
 var scaleMaxInput = 900;
-
 
 parseGeoraster(url_to_geotiff_file).then((parsedGeoraster) => {
   georaster = parsedGeoraster;
@@ -79,9 +76,6 @@ parseGeoraster(url_to_geotiff_file).then((parsedGeoraster) => {
   document.getElementById("loader").style.display = "none";
 });
 
-
-
-
 var currentOpacity = 0.6; // Default opacity
 
 // Define the function to update the map layer
@@ -94,7 +88,6 @@ function addOrUpdateRasterLayer(
   transparentMin,
   transparentMax
 ) {
-
   // Check if layer exists and remove it
   if (georasterLayer) {
     map.removeLayer(georasterLayer);
@@ -109,21 +102,19 @@ function addOrUpdateRasterLayer(
       var value = values[0];
       if (value < transparentMin || value > transparentMax)
         return "transparent";
-      return getColorForValue(value, scaleMin, scaleMax, 'Spectral');
+      return getColorForValue(value, scaleMin, scaleMax, "Spectral");
     },
-    zIndex:500
+    zIndex: 500,
   });
   georasterLayer.addTo(map);
-  updateLegend()
-
+  updateLegend();
 }
 
 function getColorForValue(value, scaleMin, scaleMax, scale) {
-  var selectedScale = 'Spectral';
+  var selectedScale = "Spectral";
 
   return chroma.scale(scale).domain([scaleMin, scaleMax])(value).hex();
 }
-
 
 // Initialize the map with default raster values
 parseGeoraster(url_to_geotiff_file).then((parsedGeoraster) => {
@@ -145,9 +136,7 @@ parseGeoraster(url_to_geotiff_file).then((parsedGeoraster) => {
 
 // Update map layer function for 'Apply' button
 
-
 // Event listener for the "Apply" button
-
 
 var comparisonList = []; // Initialize an empty comparison list
 
@@ -686,23 +675,26 @@ function updateRasterOpacity(opacity) {
 }
 
 function updateLegend() {
-
   const legend = document.getElementById("legend");
   const scaleMinValue = 180;
   const scaleMaxValue = 900;
-  const steps         = 10;      // how many colour chips
+  const steps = 10; // how many colour chips
 
   // ---------- build HTML ----------
   let html = `<h4>Gösterim (V<sub>S30</sub> Değerleri)</h4>
               <div class="legend-items">`;
 
-  const interval = (scaleMaxValue - scaleMinValue)/steps;
-  for (let i=0;i<=steps;i++){
-     const value = scaleMinValue + i*interval;
-     const colour = getColorForValue(
-                      value, scaleMinValue, scaleMaxValue, "Spectral");
+  const interval = (scaleMaxValue - scaleMinValue) / steps;
+  for (let i = 0; i <= steps; i++) {
+    const value = scaleMinValue + i * interval;
+    const colour = getColorForValue(
+      value,
+      scaleMinValue,
+      scaleMaxValue,
+      "Spectral"
+    );
 
-     html += `<div class="legend-item">
+    html += `<div class="legend-item">
                 <span class="legend-swatch" style="background:${colour}"></span>
                 ${value.toFixed(0)}
               </div>`;
@@ -715,34 +707,32 @@ function updateLegend() {
   stackSliderAboveLegend();
 }
 
-  /* ------------------------------------------------------------------ *
+/* ------------------------------------------------------------------ *
  *  Stack the transparency slider directly ABOVE the legend, so the   *
  *  two blocks never overlap – no matter how tall the legend becomes. *
  * ------------------------------------------------------------------ */
-  function stackSliderAboveLegend(){
-    const lg = document.getElementById("legend");
-    const sl = document.getElementById("transparencyControl");
-    if(!lg || !sl) return;
-  
-    // keep the slider's left-edge aligned with legend
-    sl.style.left = lg.style.left || "10px";
-  
-    // place slider just above legend (10 px gap)
-    const gap = 10;
-    const legendBottom = parseInt(lg.style.bottom || 10, 10);
-    const legendHeight = lg.offsetHeight;
-    sl.style.bottom = (legendBottom + legendHeight + gap) + "px";
-  }
-  
-  /* run once on load & resize */
-  window.addEventListener("load",   stackSliderAboveLegend);
-  window.addEventListener("resize", stackSliderAboveLegend);
-  
-  /* run again whenever the legend is rebuilt */
-  const _updateLegend = updateLegend;          // keep your existing function
-  updateLegend = function(){
-    _updateLegend.apply(this, arguments);      // draw legend as usual
-    stackSliderAboveLegend();                  // then restack controls
-  };
+function stackSliderAboveLegend() {
+  const lg = document.getElementById("legend");
+  const sl = document.getElementById("transparencyControl");
+  if (!lg || !sl) return;
 
-  
+  // keep the slider's left-edge aligned with legend
+  sl.style.left = lg.style.left || "10px";
+
+  // place slider just above legend (10 px gap)
+  const gap = 10;
+  const legendBottom = parseInt(lg.style.bottom || 10, 10);
+  const legendHeight = lg.offsetHeight;
+  sl.style.bottom = legendBottom + legendHeight + gap + "px";
+}
+
+/* run once on load & resize */
+window.addEventListener("load", stackSliderAboveLegend);
+window.addEventListener("resize", stackSliderAboveLegend);
+
+/* run again whenever the legend is rebuilt */
+const _updateLegend = updateLegend; // keep your existing function
+updateLegend = function () {
+  _updateLegend.apply(this, arguments); // draw legend as usual
+  stackSliderAboveLegend(); // then restack controls
+};
