@@ -40,7 +40,7 @@ L.control.layers(baseLayers, null, { position: "topleft" }).addTo(map);
 //s
 
 // Parse GeoRaster and add it to the map
-var url_to_geotiff_file = "https://d1f1pd1jtui8d5.cloudfront.net/global_vs30_Cnv_Cnv.tif?Expires=1768881123&Signature=WYSqGLU3thM4KeKicw8Q6OXx-C550udwT2ICKiZk3MYpwzDgGBWqySyPDDRSSQzlMPHG3ImzuvNxgPsHirGWlUS14VRAQzU9~ofE2ReRmwlKv~DP4HBTwIyFold7tqvi1~oAOk6-vOoglipVzh~NXtaSTxRu02PkcaWlkJ33J2olDs8pplWgv2ZphW8qjUPom~JYCMwNAcm3oKdTcjMK4LIGc~t5NcSAGeWxjGnN2bLzRadD-yHM3T~5-Th0N9aRbMXNM4Gh2LN7-0DcBf3jJ4HLMFvLfsAsDAYXzsX2c5jn7tLv98Dug1LtBk9DZYelI9b-hEJhEDlgguGqt-ASbw__&Key-Pair-Id=K3BYPE7UJNJQVV";
+var url_to_geotiff_file = "https://d1f1pd1jtui8d5.cloudfront.net/global_vs30_Cnv_Cnv.tif?Expires=1769054884&Signature=ccOi92Uv1WM6P03vTXp7pWVkLXWQ6yYIEdunUV-PyqCPuCc2NCdfBsMksK0a3MIFsoWIKFmU1H9gUeQ1yF7t9DhRqtdQCl1g3sIBJCgkFG-3zDaypOV1TGOi6hFUv9x2WrrdvvXovJFfumHIdQBqDjJUeoDj6j0XpBMOlSu5yHD7mcAR8jshitYn2FHM0IELepmytZz4IMn~H3wqUWjbYvjWB5N9DTDZYF9oV0663fLl76l3AEGE9eCOfUf8aaovTnqoWxueVPx6pZwlTiBHbG6lUAFxP~2UMK0mrLtHaITprSeVPs8WCTOGyp1ILUlPdlR1O6meqKWqCW~dwXg0iw__&Key-Pair-Id=K3BYPE7UJNJQVV";
   "https://d1f1pd1jtui8d5.cloudfront.net/global_vs30_Cnv_Cnv.tif?Expires=1747193920&Signature=jOqARst1P58QzSaD86yIPP6X-yHhkYVd8U6I37CwjEkN6WzUnzC7XSzicrutAdQmq74ltHMm~YOuRwJfi435ZlkP6Vprl4mRyekugRcr-e1Ipg-22JiCjP7JnRlbBoY2iDepAblqJCZ4AgUPq-a0Hj43T6Nj9HLfh2zuOOAoMY8QfK0dQBd5uG6wT99k-g1KghLOoLjIhb~~SdO4b8Jcq~gNBACx2G8CgVR1JAQwwZIXX5eml~p7Mh1FT~1rRLQwvwEhWhlIzDxDGGAzkSofHcDXYko-RwVnUoMRjDFP9kqksFcIDVOY-fGiwhJrgePrKk6vTLaV7EhGhA0sM~BYOw__&Key-Pair-Id=K3BYPE7UJNJQVV";
 var scaleMinInput = 200;
 var scaleMaxInput = 900;
